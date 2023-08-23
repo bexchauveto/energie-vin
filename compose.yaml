@@ -1,0 +1,25 @@
+services:
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=vin'
+      - 'POSTGRES_PASSWORD=secret'
+      - 'POSTGRES_USER=myuser'
+    ports:
+      - '5432'
+    networks:
+      - vin_network
+  backend:
+    image: irobire/vin:latest
+    container_name: 'app'
+    environment:
+      - 'PROFILE=prod'
+    ports:
+      - '8586:8080'
+    profiles:
+      - prod
+    networks:
+      - vin_network
+networks:
+  vin_network:
+    driver: bridge
