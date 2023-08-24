@@ -15,6 +15,6 @@ public interface PriceRepository extends JpaRepository<Price, String> {
 
     @Modifying
     @Transactional
-    @Query("DELETE FROM prices p WHERE p.date < :date")
+    @Query("DELETE FROM Price p WHERE p.date < :date")
     void deleteOlderThan(@Param("date") Instant date);
 }

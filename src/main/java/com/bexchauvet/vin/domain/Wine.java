@@ -7,8 +7,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.Instant;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "wines")
@@ -28,22 +32,26 @@ public class Wine {
     private String color;
     private String country;
     @Column(name = "taste_score")
-    @OneToMany(mappedBy = "wines", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "wine", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TasteScore> tasteScores;
-    @OneToMany(mappedBy = "wines", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Column(name = "average_score")
+    private Double averageScore;
+    @OneToMany(mappedBy = "wine", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Price> prices;
+    @Column(name = "current_price")
+    private Double currentPrice;
 
-    public Double averageScore() {
-        Double score = 0.0;
-        for (TasteScore tasteScore : this.tasteScores) {
-            score += tasteScore.getScore();
-        }
-        return score / tasteScores.size();
+    public List<String> expertCommentary() {
+        return this.tasteScores.stream().map(TasteScore::getCommentary).collect(Collectors.toList());
     }
 
-    public Double latestPrice() {
+    public Map<Instant, Double> pastPrices() {
         Collections.sort(prices);
-        return prices.get(0).getPrice();
+        Map<Instant, Double> pastPrices = new HashMap<>();
+        for (Price price : prices) {
+            pastPrices.put(price.getDate(), price.getPrice());
+        }
+        return pastPrices;
     }
 
 
