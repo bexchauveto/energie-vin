@@ -12,16 +12,16 @@ import java.util.List;
 @EqualsAndHashCode
 public class SearchWineDTO {
 
-    private List<String> colors;
-    private List<String> countries;
-    private List<Integer> vintages;
+    protected List<String> colors;
+    protected List<String> countries;
+    protected List<Integer> vintages;
     @JsonProperty("min_score")
-    private Double minScore;
+    protected Double minScore;
     @JsonProperty("max_score")
-    private Double maxScore;
+    protected Double maxScore;
     @JsonProperty("min_price")
-    private Double minPrice;
+    protected Double minPrice;
     @JsonProperty("max_price")
-    private Double maxPrice;
+    protected Double maxPrice;
 
 }

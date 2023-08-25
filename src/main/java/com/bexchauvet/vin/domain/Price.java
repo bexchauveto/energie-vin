@@ -1,5 +1,6 @@
 package com.bexchauvet.vin.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,6 +21,7 @@ public class Price implements Comparable<Price> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "price_id")
     private Long priceId;
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "wine_id")
     private Wine wine;

@@ -24,7 +24,7 @@ public class WineServiceImpl implements WineService {
     @Override
     public List<WineDTO> getAllWines() {
         return this.wineRepository.findAll().stream()
-                .map(wine -> new WineDTO(wine.getName(), wine.getProducer(), wine.getVintage(),
+                .map(wine -> new WineDTO(String.valueOf(wine.getWineId()), wine.getName(), wine.getProducer(), wine.getVintage(),
                         wine.getColor(), wine.getCountry(), wine.getAverageScore(), null,
                         wine.getCurrentPrice(), null))
                 .collect(Collectors.toList());
@@ -36,8 +36,8 @@ public class WineServiceImpl implements WineService {
         return this.wineRepository.getByCriteria(searchWineDTO.getColors(), searchWineDTO.getCountries(),
                         searchWineDTO.getVintages(), searchWineDTO.getMinScore(), searchWineDTO.getMaxScore(),
                         searchWineDTO.getMinPrice(), searchWineDTO.getMaxPrice()).stream()
-                .map(wine -> new WineDTO(wine.getName(), wine.getProducer(), wine.getVintage(),
-                        wine.getColor(), wine.getCountry(), wine.getAverageScore(), null,
+                .map(wine -> new WineDTO(String.valueOf(wine.getWineId()), wine.getName(), wine.getProducer(),
+                        wine.getVintage(), wine.getColor(), wine.getCountry(), wine.getAverageScore(), null,
                         wine.getCurrentPrice(), null))
                 .collect(Collectors.toList());
     }
@@ -45,14 +45,19 @@ public class WineServiceImpl implements WineService {
     @Override
     public WineDTO getWineById(String id) {
         Wine wine = this.wineRepository.findById(id).orElseThrow(() -> new WineNotFoundException(id));
-        return new WineDTO(wine.getName(), wine.getProducer(), wine.getVintage(),
+        return new WineDTO(String.valueOf(wine.getWineId()), wine.getName(), wine.getProducer(), wine.getVintage(),
                 wine.getColor(), wine.getCountry(), wine.getAverageScore(), wine.expertCommentary(),
                 wine.getCurrentPrice(), wine.pastPrices());
     }
 
     @Override
-    public List<String> getCountry() {
+    public List<String> getCountries() {
         return this.wineRepository.getDistinctCountry();
+    }
+
+    @Override
+    public Double currentMaxPrice() {
+        return this.wineRepository.currentMaxPrice();
     }
 
     private void checkCriteria(SearchWineDTO searchWineDTO) throws SearchWineDTOBadRequestException {

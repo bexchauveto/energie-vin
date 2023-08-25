@@ -20,6 +20,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -46,15 +47,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         if (passwordEncoder.matches(user.getPassword(), userDetails.getPassword())) {
             Instant now = Instant.now();
             long expiry = 36000L;
-            String scope = userDetails.getAuthorities().stream()
+            List<String> scope = userDetails.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)
-                    .collect(Collectors.joining(" "));
+                    .collect(Collectors.toList());
             JwtClaimsSet claims = JwtClaimsSet.builder()
                     .issuer("self")
                     .issuedAt(now)
                     .expiresAt(now.plusSeconds(expiry))
                     .subject(userDetails.getUsername())
-                    .claim("scope", scope)
+                    .claim("roles", scope)
                     .build();
             return new TokenDTO(this.encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue());
         } else {

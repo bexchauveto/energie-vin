@@ -13,5 +13,7 @@ public interface WineService {
 
     WineDTO getWineById(String id);
 
-    List<String> getCountry();
+    List<String> getCountries();
+
+    Double currentMaxPrice();
 }

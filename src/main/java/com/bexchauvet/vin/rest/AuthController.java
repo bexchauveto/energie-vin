@@ -8,7 +8,6 @@ import com.bexchauvet.vin.rest.dto.UserDTO;
 import com.bexchauvet.vin.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -34,10 +33,6 @@ public class AuthController {
 
     @Operation(summary = "User Authentication",
             description = "Authenticate the user and return a JWT token if the user is valid.")
-    @io.swagger.v3.oas.annotations.parameters.RequestBody(content =
-    @Content(mediaType = "application/json", examples =
-    @ExampleObject(value = "{\n" + "  \"username\": \"jane\",\n"
-            + "  \"password\": \"password\"\n" + "}", summary = "User Authentication Example")))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "The JWT token",
                     content = {@Content(mediaType = "application/json",

@@ -1,10 +1,13 @@
 package com.bexchauvet.vin.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.Instant;
 
 @Entity
 @Table(name = "scores")
@@ -17,12 +20,15 @@ public class TasteScore {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "taste_score_id")
     private Long tasteScoreId;
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User expert;
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "wine_id")
     private Wine wine;
+    private Instant date;
     private Double score;
     private String commentary;
 }

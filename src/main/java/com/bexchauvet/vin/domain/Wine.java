@@ -1,6 +1,7 @@
 package com.bexchauvet.vin.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,11 +32,13 @@ public class Wine {
     private Integer vintage;
     private String color;
     private String country;
+    @JsonManagedReference
     @Column(name = "taste_score")
     @OneToMany(mappedBy = "wine", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TasteScore> tasteScores;
     @Column(name = "average_score")
     private Double averageScore;
+    @JsonManagedReference
     @OneToMany(mappedBy = "wine", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Price> prices;
     @Column(name = "current_price")

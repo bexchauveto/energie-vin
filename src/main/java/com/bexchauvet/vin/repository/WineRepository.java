@@ -25,4 +25,7 @@ public interface WineRepository extends JpaRepository<Wine, String> {
     @Query("SELECT DISTINCT w.country FROM Wine w")
     List<String> getDistinctCountry();
 
+    @Query("SELECT MAX(w.currentPrice) FROM Wine w")
+    Double currentMaxPrice();
+
 }

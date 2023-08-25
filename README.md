@@ -24,7 +24,8 @@ The architecture is composed of 2 big parts:
     - Wine scrappers, developed for each platform selling wine bottles, scrap the websites and extract the data and
       convert it into a common format predefined. Scrapper can be added, updated, remove independently of other
       scrappers, for example at the start of the project, only one scrapper can be created and once the project
-      matured, others can be developed and add to the pool of scrappers.
+      matured, others can be developed and add to the pool of scrappers. Can be developed using different
+      programing languages.
     - A message queue for the scrappers to publish the information they retrieve from the websites.
     - An ingester service that subscribe to the queue and insert or update information in the database.
 - The second one is the part where the user can interact with the data retrieved:
@@ -67,8 +68,7 @@ To start locally, first you need to have Java 17 and the Docker Engine.
 ./gradlew bootRun
 ```
 
-This command will create the local /data directory and start the application and 2 containers, one for Postgres and the
-other one for Minio
+This command will create the local /data directory and start the application and 2 containers, one for Postgres
 
 ### Deploy in production
 
@@ -83,6 +83,5 @@ Here is the list of website I used to help build this backend (not exhaustive):
 - [Spring](https://spring.io/)
 - [Baeldung](https://www.baeldung.com)
 - [Stackoverflow](https://stackoverflow.com)
-- [Minio](https://min.io/)
 - [Docker Hub](https://hub.docker.com)
 - [Github](https://github.com)

@@ -15,6 +15,7 @@ import java.util.Map;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class WineDTO {
+    private String wineID;
     private String name;
     private String producer;
     private Integer vintage;
