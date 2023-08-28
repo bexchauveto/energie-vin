@@ -18,20 +18,34 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Extract metadata (tags, labels) for Docker
+      - name: Extract metadata (tags, labels) for Docker backend
         id: meta
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
-          images: irobire/boat-manager
-      - name: Build and push Docker image
+          images: irobire/vin-back
+      - name: Build and push Docker image backend
         uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
         with:
           context: .
-          file: ./Dockerfile
+          file: ./backend/Dockerfile
           push: true
-          tags: irobire/vin:latest
-      - name: Docker Push
-        run: docker push irobire/vin:latest
+          tags: irobire/vin-back:latest
+      - name: Docker Push backend
+        run: docker push irobire/vin-back:latest
+      - name: Extract metadata (tags, labels) for Docker ingester
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: irobire/vin-ingester
+      - name: Build and push Docker image ingester
+        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        with:
+          context: .
+          file: ./ingester/Dockerfile
+          push: true
+          tags: irobire/vin-ingester:latest
+      - name: Docker Push ingester
+        run: docker push irobire/vin-ingester:latest
       - name: Restart the docker microservice
         uses: appleboy/ssh-action@v1.0.0
         with:
@@ -40,7 +54,7 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            docker compose --profile prod stop app
-            docker compose --profile prod pull app
-            docker compose --profile prod up --no-start app
-            docker compose --profile prod start app
+            docker compose --profile prod stop backend ingester
+            docker compose --profile prod pull backend ingester
+            docker compose --profile prod up --no-start backend ingester
+            docker compose --profile prod start backend ingester

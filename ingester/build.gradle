@@ -1,0 +1,54 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.1.2'
+	id 'io.spring.dependency-management' version '1.1.2'
+}
+
+group = 'com.bexchauvet'
+version = '1.0.0'
+
+java {
+	sourceCompatibility = '17'
+}
+
+bootJar {
+	archiveBaseName = 'ingester'
+	archiveVersion = '1.0.0'
+	enabled = true
+	manifest {
+		attributes 'Start-Class': 'com.bexchauvet.ingester.IngesterApplication'
+	}
+}
+
+jar {
+	archiveBaseName = 'ingester'
+	archiveVersion = '1.0.0'
+	enabled = true
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-amqp'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
+	runtimeOnly 'org.postgresql:postgresql'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.amqp:spring-rabbit-test'
+	testImplementation 'com.h2database:h2:2.1.214'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

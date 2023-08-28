@@ -1,6 +1,7 @@
 services:
   postgres:
     image: 'postgres:latest'
+    container_name: 'postgres'
     environment:
       - 'POSTGRES_DB=vin'
       - 'POSTGRES_PASSWORD=secret'
@@ -8,18 +9,40 @@ services:
     ports:
       - '5432'
     networks:
-      - vin_network
+      - vin_network_back
+      - vin_network_ingester
+  rabbitmq:
+    image: 'rabbitmq:latest'
+    container_name: 'rabbitmq'
+    environment:
+      - 'RABBITMQ_DEFAULT_PASS=secret'
+      - 'RABBITMQ_DEFAULT_USER=myuser'
+    ports:
+      - '5672'
+    networks:
+      - vin_network_ingester
   backend:
-    image: irobire/vin:latest
-    container_name: 'app'
+    build: backend/.
+    image: irobire/vin-back:latest
+    container_name: 'backend'
     environment:
       - 'PROFILE=prod'
     ports:
       - '8586:8080'
-    profiles:
-      - prod
     networks:
-      - vin_network
+      - vin_network_back
+  ingester:
+    build: ingester/.
+    image: irobire/vin-ingester:latest
+    container_name: 'ingester'
+    environment:
+      - 'PROFILE=prod'
+    ports:
+      - '8686:8080'
+    networks:
+      - vin_network_ingester
 networks:
-  vin_network:
+  vin_network_back:
+    driver: bridge
+  vin_network_ingester:
     driver: bridge

@@ -1,6 +1,6 @@
 # Wine Energy
 
-The goal of this project is to propose an architecture and a proof of concept for an application that follow this ideas:
+The goal of this project is to propose an architecture and a proof of concept for an application that follow these ideas:
 
 - Develop a research platform that indexes wines available on specialized websites.
   The data (bottle details, prices, and sales sites) can be fetched from an external service, the specifics of which are
@@ -39,7 +39,9 @@ The architecture is composed of 2 big parts:
 
 ## Proof of concept
 
-The proof of concept focus on the second big parts of the architecture. Mocked data will be inserted into the database.
+The proof of concept focus on the backend part with rest API allowing a front end to be plugged in and the ingester 
+receiving data from mocked wine scrapper. It will show how data is integrated into the system and how user can 
+access it.
 
 ### What is done
 
@@ -59,6 +61,16 @@ The wine expert also can:
 - provide opinion about a wine bottle based on a score out of 100 and a written commentary.
 
 ### Limits and Improvements
+
+### Future development and needs
+As the central link is operational, the focus should be put on the two other endpoints
+- The front end should be developed after hiring a front-end or fullstack developer. (if fullstack, the developer 
+  would be able to maintain the backend rest API part as well as continue developing the front end)
+- The first backend developer that work on the project could continue to work on it, especially starting to create 
+  wines scrappers and maintaining the backend rest API part if there is only another front end developer.
+- A devops could also work in the beginning to integrate CI/CD and best practice for the code base (Code quality,etc).
+- As the project grows other developer could join the project, for example to create a mobile applications of the 
+  front-end, or to create and maintain even more wine scrappers.
 
 ### Start locally
 

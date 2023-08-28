@@ -1,0 +1,50 @@
+spring:
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        ddl-auto: none
+        show-sql: false
+    generate-ddl: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/vin
+    username: myuser
+    password: secret
+  docker:
+    compose:
+      enabled: true
+      file: backend/compose.yaml
+jwt:
+  private.key: classpath:app.key
+  public.key: classpath:app.pub
+springdoc:
+  swagger-ui:
+    use-root-path: true
+server-swagger: http://localhost:8080
+app:
+  year-to-keep: 1
+  cron:
+    remove-older-price: 0 0 0 * * *
+    update-price: 0 30 0 * * *
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        ddl-auto: none
+        show-sql: false
+    generate-ddl: true
+  datasource:
+    url: jdbc:postgresql://postgres:5432/vin
+    username: myuser
+    password: secret
+server-swagger: https://wine-services.bex-chauvet.fr/
+app:
+  year-to-keep: 1
+  cron:
+    remove-older-price: 0 0 0 * * *
+    update-price: 0 30 0 * * *
