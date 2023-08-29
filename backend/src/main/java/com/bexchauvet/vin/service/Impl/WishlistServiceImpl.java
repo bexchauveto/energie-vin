@@ -1,11 +1,11 @@
 package com.bexchauvet.vin.service.Impl;
 
-import com.bexchauvet.vin.domain.User;
-import com.bexchauvet.vin.domain.WishList;
+import com.bexchauvet.lib.domain.User;
+import com.bexchauvet.lib.domain.WishList;
 import com.bexchauvet.vin.error.exception.WishListDTOBadRequestException;
 import com.bexchauvet.vin.error.exception.WishListNotFoundException;
-import com.bexchauvet.vin.repository.UserRepository;
-import com.bexchauvet.vin.repository.WishlistRepository;
+import com.bexchauvet.lib.repository.UserRepository;
+import com.bexchauvet.lib.repository.WishlistRepository;
 import com.bexchauvet.vin.rest.dto.MessageDTO;
 import com.bexchauvet.vin.rest.dto.WishlistDTO;
 import com.bexchauvet.vin.service.WishlistService;

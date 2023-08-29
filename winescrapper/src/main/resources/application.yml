@@ -1,0 +1,35 @@
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: myuser
+    password: secret
+  docker:
+    compose:
+      enabled: true
+      file: winescrapper/compose.yaml
+springdoc:
+  swagger-ui:
+    use-root-path: true
+server-swagger: http://localhost:8080
+app:
+  rabbitmq:
+    exchange: energie-vin
+    queue: wines
+    routing-key: energie.vin.routing
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: myuser
+    password: secret
+server-swagger: https://wine-scrapper.bex-chauvet.fr/
+app:
+  rabbitmq:
+    exchange: energie-vin
+    queue: wines
+    routing-key: energie.vin.routing

@@ -1,9 +1,9 @@
 package com.bexchauvet.vin.service.Impl;
 
-import com.bexchauvet.vin.domain.Wine;
+import com.bexchauvet.lib.domain.Wine;
 import com.bexchauvet.vin.error.exception.SearchWineDTOBadRequestException;
 import com.bexchauvet.vin.error.exception.WineNotFoundException;
-import com.bexchauvet.vin.repository.WineRepository;
+import com.bexchauvet.lib.repository.WineRepository;
 import com.bexchauvet.vin.rest.dto.SearchWineDTO;
 import com.bexchauvet.vin.rest.dto.WineDTO;
 import com.bexchauvet.vin.service.WineService;

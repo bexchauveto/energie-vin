@@ -1,4 +1,6 @@
 rootProject.name = 'vin'
 include 'ingester'
 include 'backend'
+include 'winescrapper'
+include 'lib'
 

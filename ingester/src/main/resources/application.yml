@@ -10,10 +10,20 @@ spring:
     url: jdbc:postgresql://localhost:5432/vin
     username: myuser
     password: secret
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: myuser
+    password: secret
   docker:
     compose:
       enabled: true
       file: ingester/compose.yaml
+app:
+  rabbitmq:
+    exchange: energie-vin
+    queue: wines
+    routing-key: energie.vin.routing
 ---
 spring:
   config:
@@ -30,3 +40,13 @@ spring:
     url: jdbc:postgresql://postgres:5432/vin
     username: myuser
     password: secret
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: myuser
+    password: secret
+app:
+  rabbitmq:
+    exchange: energie-vin
+    queue: wines
+    routing-key: energie.vin.routing

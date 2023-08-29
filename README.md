@@ -40,25 +40,22 @@ The architecture is composed of 2 big parts:
 ## Proof of concept
 
 The proof of concept focus on the backend part with rest API allowing a front end to be plugged in and the ingester 
-receiving data from mocked wine scrapper. It will show how data is integrated into the system and how user can 
-access it.
+receiving data from mocked wine scrapper using RabbitMQ Queue. It will show how data is integrated into the system and 
+how user can access it.
 
 ### What is done
 
-The basic user can:
+API endpoints have been created and allow the:
 
-- access the list of wines
-- search from the wines list using criteria
-- register to the website
-
-The registered user also can:
-
-- access a specific wine bottle information such as producer, color, current price, expert score, past price.
-- create wishlist with criteria
-
-The wine expert also can:
-
-- provide opinion about a wine bottle based on a score out of 100 and a written commentary.
+- The basic user can:
+  - access the list of wines
+  - search from the wines list using criteria
+  - register to the website
+- The registered user also can:
+  - access a specific wine bottle information such as producer, color, current price, expert score, past price.
+  - create wishlist with criteria
+- The wine expert also can:
+  - provide opinion about a wine bottle based on a score out of 100 and a written commentary.
 
 ### Limits and Improvements
 

@@ -1,6 +1,6 @@
 package com.bexchauvet.vin.service.Impl;
 
-import com.bexchauvet.vin.repository.PriceRepository;
+import com.bexchauvet.lib.repository.PriceRepository;
 import com.bexchauvet.vin.service.PriceService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;

@@ -19,6 +19,7 @@ services:
       - 'RABBITMQ_DEFAULT_USER=myuser'
     ports:
       - '5672'
+      - '15672'
     networks:
       - vin_network_ingester
   backend:
@@ -39,6 +40,16 @@ services:
       - 'PROFILE=prod'
     ports:
       - '8686:8080'
+    networks:
+      - vin_network_ingester
+  winescrapper:
+    build: winescrapper/.
+    image: irobire/vin-winescrapper:latest
+    container_name: 'winescrapper'
+    environment:
+      - 'PROFILE=prod'
+    ports:
+      - '8786:8080'
     networks:
       - vin_network_ingester
 networks:
