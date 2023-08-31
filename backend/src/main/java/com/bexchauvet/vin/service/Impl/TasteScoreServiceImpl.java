@@ -13,13 +13,16 @@ import com.bexchauvet.vin.rest.dto.TasteScoreDTO;
 import com.bexchauvet.vin.service.TasteScoreService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class TasteScoreServiceImpl implements TasteScoreService {
 
     private TasteScoreRepository tasteScoreRepository;
@@ -28,7 +31,8 @@ public class TasteScoreServiceImpl implements TasteScoreService {
 
     @Override
     public List<TasteScoreDTO> getAllTasteByUserID(String userID) {
-        List<TasteScore> tasteScores = this.tasteScoreRepository.findByUserID(userID);
+        User user = this.userRepository.findByUsername(userID).get();
+        List<TasteScore> tasteScores = this.tasteScoreRepository.findByUserID(user);
         return tasteScores.stream().map(tasteScore ->
                         new TasteScoreDTO(String.valueOf(tasteScore.getWine().getWineId()), tasteScore.getDate(),
                                 tasteScore.getScore(), tasteScore.getCommentary()))
@@ -56,7 +60,11 @@ public class TasteScoreServiceImpl implements TasteScoreService {
                 .orElseThrow(() -> new WineNotFoundException(tasteScoreDTO.getWineID()));
         TasteScore tasteScore = this.tasteScoreRepository.save(new TasteScore(null, user, wine, tasteScoreDTO.getDate(),
                 tasteScoreDTO.getScore(), tasteScoreDTO.getCommentary()));
+        if(wine.getTasteScores() == null) {
+            wine.setTasteScores(new ArrayList<>());
+        }
         wine.getTasteScores().add(tasteScore);
+        log.info(wine.getTasteScores().get(0).toString());
         wine.setAverageScore(wine.getTasteScores().stream().mapToDouble(TasteScore::getScore).sum()/wine.getTasteScores().size());
         this.wineRepository.save(wine);
         return new MessageDTO(String.format("Taste score with ID %s has been created", tasteScore.getTasteScoreId()),

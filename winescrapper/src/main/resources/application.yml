@@ -8,6 +8,9 @@ spring:
     compose:
       enabled: true
       file: winescrapper/compose.yaml
+  jackson:
+    parser:
+      allow-unquoted-control-chars: true
 springdoc:
   swagger-ui:
     use-root-path: true

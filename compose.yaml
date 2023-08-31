@@ -2,32 +2,55 @@ services:
   postgres:
     image: 'postgres:latest'
     container_name: 'postgres'
+    healthcheck:
+      test: [ "CMD-SHELL", "sh -c 'pg_isready -d vin -U myuser'" ]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    profiles:
+      - back
+      - ingestion
+      - prod
     environment:
       - 'POSTGRES_DB=vin'
       - 'POSTGRES_PASSWORD=secret'
       - 'POSTGRES_USER=myuser'
     ports:
-      - '5432'
+      - '5432:5432'
     networks:
       - vin_network_back
       - vin_network_ingester
   rabbitmq:
-    image: 'rabbitmq:latest'
+    image: 'rabbitmq:3-management'
     container_name: 'rabbitmq'
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    profiles:
+      - ingestion
+      - prod
     environment:
       - 'RABBITMQ_DEFAULT_PASS=secret'
       - 'RABBITMQ_DEFAULT_USER=myuser'
     ports:
-      - '5672'
-      - '15672'
+      - '5672:5672'
+      - '15672:15672'
     networks:
       - vin_network_ingester
   backend:
     build: backend/.
-    image: irobire/vin-back:latest
+    image: irobire/vin-backend:latest
     container_name: 'backend'
+    depends_on:
+      postgres:
+        condition: service_healthy
+    profiles:
+      - back
+      - prod
     environment:
-      - 'PROFILE=prod'
+      - "SPRING_PROFILES_ACTIVE=prod"
     ports:
       - '8586:8080'
     networks:
@@ -36,18 +59,32 @@ services:
     build: ingester/.
     image: irobire/vin-ingester:latest
     container_name: 'ingester'
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    profiles:
+      - ingestion
+      - prod
     environment:
-      - 'PROFILE=prod'
+      - "SPRING_PROFILES_ACTIVE=prod"
     ports:
       - '8686:8080'
     networks:
       - vin_network_ingester
   winescrapper:
     build: winescrapper/.
-    image: irobire/vin-winescrapper:latest
+    image: irobire/vin-wine-scrapper:latest
     container_name: 'winescrapper'
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    profiles:
+      - ingestion
+      - prod
     environment:
-      - 'PROFILE=prod'
+      - "SPRING_PROFILES_ACTIVE=prod"
     ports:
       - '8786:8080'
     networks:

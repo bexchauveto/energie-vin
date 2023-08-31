@@ -12,7 +12,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Slf4j
@@ -36,7 +36,7 @@ public class WineReceiver{
                     wine.get().getName()));
         } else {
             Wine newWine = this.wineRepository.save(new Wine(null, wineMQ.getName(), wineMQ.getProducer(), wineMQ.getVintage(),
-                    wineMQ.getColor(), wineMQ.getCountry(), null, null, null, wineMQ.getPrice()));
+                    wineMQ.getColor(), wineMQ.getCountry(), new ArrayList<>(), null, new ArrayList<>(), wineMQ.getPrice()));
             this.priceRepository.save(new Price(null, newWine, wineMQ.getUrl(), Instant.now(), wineMQ.getPrice()));
             log.info(String.format("Inserting new Wine bottle under id %d with name %s", newWine.getWineId(),
                     newWine.getName()));

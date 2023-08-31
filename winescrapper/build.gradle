@@ -1,15 +1,5 @@
-plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.1.2'
-	id 'io.spring.dependency-management' version '1.1.2'
-}
-
-group = 'com.bexchauvet'
-version = '1.0.0'
-
-java {
-	sourceCompatibility = '17'
-}
+description = 'The wine scrapper microservices, scrappe a specific website for wine informations and send it to a ' +
+		'message queue'
 
 bootJar {
 	archiveBaseName = 'wine-scrapper'
@@ -26,28 +16,29 @@ jar {
 	enabled = true
 }
 
+bootBuildImage{
+	imageName='irobire/vin-wine-scrapper'
+	publish = true
+	docker {
+		publishRegistry {
+			url = 'https://hub.docker.com/'
+			username = '${DOCKER_USERNAME}'
+			password = '${DOCKER_PASSWORD}'
+		}
+	}
+}
+
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
 }
 
-repositories {
-	mavenCentral()
-}
-
 dependencies {
+	api(project(":lib")) {
+		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-data-jpa'
+	}
 	implementation 'org.springframework.boot:spring-boot-starter-amqp'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
-	implementation project(":lib")
-	compileOnly 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.amqp:spring-rabbit-test'
-}
-
-tasks.named('test') {
-	useJUnitPlatform()
 }

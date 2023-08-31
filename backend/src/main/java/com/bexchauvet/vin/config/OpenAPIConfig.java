@@ -16,10 +16,10 @@ import java.util.List;
 
 @Configuration
 @OpenAPIDefinition(
-        info = @Info(title = "Vin API", version = "1.0",
+        info = @Info(title = "Wine API", version = "1.0",
                 contact = @Contact(name = "Olivier Bex-Chauvet", email = "olivier@bex-chauvet.fr",
                         url = "https://bex-chauvet.fr"),
-                description = "This API is created to manage a wine"))
+                description = "This API is created to manage a wine aggregator online shopping website"))
 public class OpenAPIConfig {
 
 
@@ -39,7 +39,8 @@ public class OpenAPIConfig {
                                 .scheme("bearer")
                                 .description(
                                         "Provide the JWT token. JWT token can be obtained from the Login API.")
-                                .bearerFormat("JWT"))).servers(List.of(new Server().url(serverUrl)
+                                .bearerFormat("JWT"))).servers(List.of(new Server().url("http://localhost:8586")
+                        //.url(serverUrl)
                         .description(serverUrl.contains("localhost") ? "Development" : "Production")));
 
     }

@@ -1,6 +1,7 @@
 package com.bexchauvet.lib.repository;
 
 import com.bexchauvet.lib.domain.TasteScore;
+import com.bexchauvet.lib.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,6 +14,6 @@ public interface TasteScoreRepository extends JpaRepository<TasteScore, String> 
 
 
     @Query("SELECT t FROM TasteScore t WHERE t.expert = :user_id")
-    List<TasteScore> findByUserID(@Param("user_id") String userID);
+    List<TasteScore> findByUserID(@Param("user_id") User user);
 
 }

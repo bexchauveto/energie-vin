@@ -6,6 +6,9 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
+jwt:
+  private.key: classpath:app.key
+  public.key: classpath:app.pub
 springdoc:
   swagger-ui:
     use-root-path: true
