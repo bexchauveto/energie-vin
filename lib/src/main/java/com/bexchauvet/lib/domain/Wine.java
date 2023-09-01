@@ -9,10 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -35,12 +32,12 @@ public class Wine {
     @JsonManagedReference
     @Column(name = "taste_score")
     @OneToMany(mappedBy = "wine", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<TasteScore> tasteScores;
+    private ArrayList<TasteScore> tasteScores;
     @Column(name = "average_score")
     private Double averageScore;
     @JsonManagedReference
     @OneToMany(mappedBy = "wine", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Price> prices;
+    private ArrayList<Price> prices;
     @Column(name = "current_price")
     private Double currentPrice;
 

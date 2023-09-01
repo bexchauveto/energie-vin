@@ -14,6 +14,6 @@ public interface TasteScoreRepository extends JpaRepository<TasteScore, String> 
 
 
     @Query("SELECT t FROM TasteScore t WHERE t.expert = :user_id")
-    List<TasteScore> findByUserID(@Param("user_id") User user);
+    List<TasteScore> findByUser(@Param("user_id") User user);
 
 }

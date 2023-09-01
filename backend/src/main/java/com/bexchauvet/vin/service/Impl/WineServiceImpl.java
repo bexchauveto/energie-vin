@@ -1,9 +1,9 @@
 package com.bexchauvet.vin.service.Impl;
 
 import com.bexchauvet.lib.domain.Wine;
+import com.bexchauvet.lib.repository.WineRepository;
 import com.bexchauvet.vin.error.exception.SearchWineDTOBadRequestException;
 import com.bexchauvet.vin.error.exception.WineNotFoundException;
-import com.bexchauvet.lib.repository.WineRepository;
 import com.bexchauvet.vin.rest.dto.SearchWineDTO;
 import com.bexchauvet.vin.rest.dto.WineDTO;
 import com.bexchauvet.vin.service.WineService;
@@ -64,7 +64,7 @@ public class WineServiceImpl implements WineService {
         if (!searchWineDTO.getColors().stream().allMatch(Constants.VIN_COLORS::contains)) {
             throw new SearchWineDTOBadRequestException("Wine colors can only be ROUGE, BLANC or ROSE");
         }
-        if (!searchWineDTO.getVintages().stream().allMatch(vintage -> (vintage < LocalDate.now().getYear() && vintage > 1900))) {
+        if (!searchWineDTO.getVintages().stream().allMatch(vintage -> (vintage <= LocalDate.now().getYear() && vintage > 1900))) {
             throw new SearchWineDTOBadRequestException("Wine vintages can only be between 1900 and " + LocalDate.now().getYear());
         }
         if (searchWineDTO.getMinScore() < 0.0) {

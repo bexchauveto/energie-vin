@@ -3,11 +3,11 @@ package com.bexchauvet.vin.service.Impl;
 import com.bexchauvet.lib.domain.TasteScore;
 import com.bexchauvet.lib.domain.User;
 import com.bexchauvet.lib.domain.Wine;
-import com.bexchauvet.vin.error.exception.TasteScoreNotFoundException;
-import com.bexchauvet.vin.error.exception.WineNotFoundException;
 import com.bexchauvet.lib.repository.TasteScoreRepository;
 import com.bexchauvet.lib.repository.UserRepository;
 import com.bexchauvet.lib.repository.WineRepository;
+import com.bexchauvet.vin.error.exception.TasteScoreNotFoundException;
+import com.bexchauvet.vin.error.exception.WineNotFoundException;
 import com.bexchauvet.vin.rest.dto.MessageDTO;
 import com.bexchauvet.vin.rest.dto.TasteScoreDTO;
 import com.bexchauvet.vin.service.TasteScoreService;
@@ -30,9 +30,9 @@ public class TasteScoreServiceImpl implements TasteScoreService {
     private UserRepository userRepository;
 
     @Override
-    public List<TasteScoreDTO> getAllTasteByUserID(String userID) {
-        User user = this.userRepository.findByUsername(userID).get();
-        List<TasteScore> tasteScores = this.tasteScoreRepository.findByUserID(user);
+    public List<TasteScoreDTO> getAllTasteByUsername(String username) {
+        User user = this.userRepository.findByUsername(username).get();
+        List<TasteScore> tasteScores = this.tasteScoreRepository.findByUser(user);
         return tasteScores.stream().map(tasteScore ->
                         new TasteScoreDTO(String.valueOf(tasteScore.getWine().getWineId()), tasteScore.getDate(),
                                 tasteScore.getScore(), tasteScore.getCommentary()))
@@ -41,8 +41,8 @@ public class TasteScoreServiceImpl implements TasteScoreService {
 
     @Override
     @Transactional
-    public TasteScoreDTO getID(String id, String userID) {
-        User user = this.userRepository.findByUsername(userID).get();
+    public TasteScoreDTO getID(String id, String username) {
+        User user = this.userRepository.findByUsername(username).get();
         TasteScore tasteScore = this.tasteScoreRepository.findById(id)
                 .orElseThrow(() -> new TasteScoreNotFoundException(id));
         if (!tasteScore.getExpert().getUserId().equals(user.getUserId())) {
@@ -54,27 +54,26 @@ public class TasteScoreServiceImpl implements TasteScoreService {
 
     @Override
     @Transactional
-    public MessageDTO createTasteScore(TasteScoreDTO tasteScoreDTO, String userID) {
-        User user = this.userRepository.findByUsername(userID).get();
+    public MessageDTO createTasteScore(TasteScoreDTO tasteScoreDTO, String username) {
+        User user = this.userRepository.findByUsername(username).get();
         Wine wine = this.wineRepository.findById(tasteScoreDTO.getWineID())
                 .orElseThrow(() -> new WineNotFoundException(tasteScoreDTO.getWineID()));
         TasteScore tasteScore = this.tasteScoreRepository.save(new TasteScore(null, user, wine, tasteScoreDTO.getDate(),
                 tasteScoreDTO.getScore(), tasteScoreDTO.getCommentary()));
-        if(wine.getTasteScores() == null) {
+        if (wine.getTasteScores() == null) {
             wine.setTasteScores(new ArrayList<>());
         }
         wine.getTasteScores().add(tasteScore);
-        log.info(wine.getTasteScores().get(0).toString());
-        wine.setAverageScore(wine.getTasteScores().stream().mapToDouble(TasteScore::getScore).sum()/wine.getTasteScores().size());
+        wine.setAverageScore(wine.getTasteScores().stream().mapToDouble(TasteScore::getScore).sum() / wine.getTasteScores().size());
         this.wineRepository.save(wine);
         return new MessageDTO(String.format("Taste score with ID %s has been created", tasteScore.getTasteScoreId()),
-                tasteScore);
+                tasteScoreDTO);
     }
 
     @Override
     @Transactional
-    public MessageDTO updateTasteScore(String id, TasteScoreDTO tasteScoreDTO, String userID) {
-        User user = this.userRepository.findByUsername(userID).get();
+    public MessageDTO updateTasteScore(String id, TasteScoreDTO tasteScoreDTO, String username) {
+        User user = this.userRepository.findByUsername(username).get();
         Wine wine = this.wineRepository.findById(tasteScoreDTO.getWineID())
                 .orElseThrow(() -> new WineNotFoundException(tasteScoreDTO.getWineID()));
         TasteScore tasteScore = this.tasteScoreRepository.findById(id)
@@ -86,16 +85,16 @@ public class TasteScoreServiceImpl implements TasteScoreService {
         tasteScore.setScore(tasteScoreDTO.getScore());
         tasteScore.setCommentary(tasteScoreDTO.getCommentary());
         tasteScore = this.tasteScoreRepository.save(tasteScore);
-        wine.setAverageScore(wine.getTasteScores().stream().mapToDouble(TasteScore::getScore).sum()/wine.getTasteScores().size());
+        wine.setAverageScore(wine.getTasteScores().stream().mapToDouble(TasteScore::getScore).sum() / wine.getTasteScores().size());
         this.wineRepository.save(wine);
         return new MessageDTO(String.format("Taste score with ID %s has been updated", tasteScore.getTasteScoreId()),
-                tasteScore);
+                tasteScoreDTO);
     }
 
     @Override
     @Transactional
-    public MessageDTO deleteTasteScore(String id, String userID) {
-        User user = this.userRepository.findByUsername(userID).get();
+    public MessageDTO deleteTasteScore(String id, String username) {
+        User user = this.userRepository.findByUsername(username).get();
         TasteScore tasteScore = this.tasteScoreRepository.findById(id)
                 .orElseThrow(() -> new TasteScoreNotFoundException(id));
         if (!tasteScore.getExpert().getUserId().equals(user.getUserId())) {
@@ -105,7 +104,7 @@ public class TasteScoreServiceImpl implements TasteScoreService {
                 .orElseThrow(() -> new WineNotFoundException(String.valueOf(tasteScore.getWine().getWineId())));
         this.tasteScoreRepository.delete(tasteScore);
         wine.getTasteScores().remove(tasteScore);
-        wine.setAverageScore(wine.getTasteScores().stream().mapToDouble(TasteScore::getScore).sum()/wine.getTasteScores().size());
+        wine.setAverageScore(wine.getTasteScores().stream().mapToDouble(TasteScore::getScore).sum() / wine.getTasteScores().size());
         this.wineRepository.save(wine);
         return new MessageDTO(String.format("Taste score with ID %s has been deleted", tasteScore.getTasteScoreId()),
                 tasteScore.getTasteScoreId());

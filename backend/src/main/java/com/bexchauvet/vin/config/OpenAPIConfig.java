@@ -39,8 +39,7 @@ public class OpenAPIConfig {
                                 .scheme("bearer")
                                 .description(
                                         "Provide the JWT token. JWT token can be obtained from the Login API.")
-                                .bearerFormat("JWT"))).servers(List.of(new Server().url("http://localhost:8586")
-                        //.url(serverUrl)
+                                .bearerFormat("JWT"))).servers(List.of(new Server().url(serverUrl)
                         .description(serverUrl.contains("localhost") ? "Development" : "Production")));
 
     }

@@ -1,4 +1,4 @@
-package com.bexchauvet.winescrapper.controller;
+package com.bexchauvet.winescrapper.rest;
 
 
 import com.bexchauvet.lib.mq.WineMQ;

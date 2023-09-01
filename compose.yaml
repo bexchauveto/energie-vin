@@ -40,7 +40,6 @@ services:
     networks:
       - vin_network_ingester
   backend:
-    build: backend/.
     image: irobire/vin-backend:latest
     container_name: 'backend'
     depends_on:
@@ -56,7 +55,6 @@ services:
     networks:
       - vin_network_back
   ingester:
-    build: ingester/.
     image: irobire/vin-ingester:latest
     container_name: 'ingester'
     depends_on:
@@ -74,7 +72,6 @@ services:
     networks:
       - vin_network_ingester
   winescrapper:
-    build: winescrapper/.
     image: irobire/vin-wine-scrapper:latest
     container_name: 'winescrapper'
     depends_on:

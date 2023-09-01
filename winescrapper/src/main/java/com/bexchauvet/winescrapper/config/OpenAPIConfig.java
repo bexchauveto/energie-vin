@@ -25,8 +25,7 @@ public class OpenAPIConfig {
 
     @Bean
     public OpenAPI customizeOpenAPI() {
-        return new OpenAPI().servers(List.of(new Server().url("http://localhost:8786")
-                //.url(serverUrl)
+        return new OpenAPI().servers(List.of(new Server().url(serverUrl)
                 .description(serverUrl.contains("localhost") ? "Development" : "Production")));
     }
 

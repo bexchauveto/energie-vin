@@ -8,7 +8,7 @@ import java.util.List;
 public interface TasteScoreService {
 
 
-    List<TasteScoreDTO> getAllTasteByUserID(String userID);
+    List<TasteScoreDTO> getAllTasteByUsername(String userID);
 
     TasteScoreDTO getID(String id, String userID);
 

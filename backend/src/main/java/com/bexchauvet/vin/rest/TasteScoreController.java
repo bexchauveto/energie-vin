@@ -43,7 +43,7 @@ public class TasteScoreController {
                             schema = @Schema(implementation = ErrorDTO.class)))})
     @GetMapping("")
     public List<TasteScoreDTO> getAll(@Parameter(hidden = true) @RequestHeader(name = "Authorization") String token) {
-        return this.tasteScoreService.getAllTasteByUserID(jwtDecoder.decode(token.split(" ")[1]).getSubject());
+        return this.tasteScoreService.getAllTasteByUsername(jwtDecoder.decode(token.split(" ")[1]).getSubject());
     }
 
     @Secured({Constants.ROLE_EXPERT})

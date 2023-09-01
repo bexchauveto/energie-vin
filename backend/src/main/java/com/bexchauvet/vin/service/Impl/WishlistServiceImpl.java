@@ -2,10 +2,10 @@ package com.bexchauvet.vin.service.Impl;
 
 import com.bexchauvet.lib.domain.User;
 import com.bexchauvet.lib.domain.WishList;
-import com.bexchauvet.vin.error.exception.WishListDTOBadRequestException;
-import com.bexchauvet.vin.error.exception.WishListNotFoundException;
 import com.bexchauvet.lib.repository.UserRepository;
 import com.bexchauvet.lib.repository.WishlistRepository;
+import com.bexchauvet.vin.error.exception.WishListDTOBadRequestException;
+import com.bexchauvet.vin.error.exception.WishListNotFoundException;
 import com.bexchauvet.vin.rest.dto.MessageDTO;
 import com.bexchauvet.vin.rest.dto.WishlistDTO;
 import com.bexchauvet.vin.service.WishlistService;
@@ -27,10 +27,11 @@ public class WishlistServiceImpl implements WishlistService {
 
     @Override
     public List<WishlistDTO> getWishlistByUserID(String userID) {
-        List<WishList> wishLists = this.wishlistRepository.findByUserID(userID);
-        return wishLists.stream().map(wishlist -> new WishlistDTO(wishlist.getName(), wishlist.getColors(),
-                wishlist.getCountries(), wishlist.getVintages(), wishlist.getMinScore(), wishlist.getMaxScore(),
-                wishlist.getMinPrice(), wishlist.getMaxPrice())).collect(Collectors.toList());
+        User user = this.userRepository.findByUsername(userID).get();
+        return this.wishlistRepository.findByUserID(user).stream()
+                .map(wishlist -> new WishlistDTO(wishlist.getName(), wishlist.getColors(),
+                        wishlist.getCountries(), wishlist.getVintages(), wishlist.getMinScore(), wishlist.getMaxScore(),
+                        wishlist.getMinPrice(), wishlist.getMaxPrice())).collect(Collectors.toList());
     }
 
     @Override
@@ -54,7 +55,7 @@ public class WishlistServiceImpl implements WishlistService {
                 wishlistDTO.getCountries(), wishlistDTO.getVintages(), wishlistDTO.getMinScore(),
                 wishlistDTO.getMaxScore(), wishlistDTO.getMinPrice(), wishlistDTO.getMaxPrice()));
         return new MessageDTO(String.format("Wishlist with ID %s has been created", wishList.getWishlistId()),
-                wishList);
+                wishlistDTO);
     }
 
     @Override
@@ -75,7 +76,7 @@ public class WishlistServiceImpl implements WishlistService {
         wishlist.setMaxPrice(wishlistDTO.getMaxPrice());
         wishlist = this.wishlistRepository.save(wishlist);
         return new MessageDTO(String.format("Wishlist with ID %s has been updated", wishlist.getWishlistId()),
-                wishlist);
+                wishlistDTO);
     }
 
     @Override
@@ -94,7 +95,7 @@ public class WishlistServiceImpl implements WishlistService {
         if (!wishlistDTO.getColors().stream().allMatch(Constants.VIN_COLORS::contains)) {
             throw new WishListDTOBadRequestException("Wine colors can only be ROUGE, BLANC or ROSE");
         }
-        if (!wishlistDTO.getVintages().stream().allMatch(vintage -> (vintage < LocalDate.now().getYear() && vintage > 1900))) {
+        if (!wishlistDTO.getVintages().stream().allMatch(vintage -> (vintage <= LocalDate.now().getYear() && vintage > 1900))) {
             throw new WishListDTOBadRequestException("Wine vintages can only be between 1900 and " + LocalDate.now().getYear());
         }
         if (wishlistDTO.getMinScore() < 0.0) {

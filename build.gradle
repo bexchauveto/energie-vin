@@ -3,6 +3,7 @@ plugins {
     id 'java-library'
     id 'org.springframework.boot' version '3.1.2'
     id 'io.spring.dependency-management' version '1.1.2'
+    id 'jacoco-report-aggregation'
 }
 allprojects {
     group = 'com.bexchauvet'
@@ -20,6 +21,7 @@ subprojects {
     apply plugin: 'java-library'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'jacoco-report-aggregation'
 
     tasks.named('test') {
         useJUnitPlatform()
@@ -34,12 +36,16 @@ subprojects {
         annotationProcessor 'org.projectlombok:lombok'
     }
 
+    tasks.named('check') {
+        dependsOn tasks.named('testCodeCoverageReport', JacocoReport)
+    }
+
 }
 
 bootJar {
     enabled = false
 }
 
-bootBuildImage{
+bootBuildImage {
     enabled = false
 }

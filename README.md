@@ -1,6 +1,7 @@
 # Wine Energy
 
-The goal of this project is to propose an architecture and a proof of concept for an application that follow these ideas:
+The goal of this project is to propose an architecture and a proof of concept for an application that follow these
+ideas:
 
 - Develop a research platform that indexes wines available on specialized websites.
   The data (bottle details, prices, and sales sites) can be fetched from an external service, the specifics of which are
@@ -39,8 +40,8 @@ The architecture is composed of 2 big parts:
 
 ## Proof of concept
 
-The proof of concept focus on the backend part with rest API allowing a front end to be plugged in and the ingester 
-receiving data from mocked wine scrapper using RabbitMQ Queue. It will show how data is integrated into the system and 
+The proof of concept focus on the backend part with rest API allowing a front end to be plugged in and the ingester
+receiving data from mocked wine scrapper using RabbitMQ Queue. It will show how data is integrated into the system and
 how user can access it.
 
 ### What is done
@@ -48,36 +49,48 @@ how user can access it.
 API endpoints have been created and allow the:
 
 - The basic user can:
-  - access the list of wines
-  - search from the wines list using criteria
-  - register to the website
+    - access the list of wines
+    - search from the wines list using criteria
+    - register to the website
 - The registered user also can:
-  - access a specific wine bottle information such as producer, color, current price, expert score, past price.
-  - create wishlist with criteria
+    - access a specific wine bottle information such as producer, color, current price, expert score, past price.
+    - create wishlist with criteria
 - The wine expert also can:
-  - provide opinion about a wine bottle based on a score out of 100 and a written commentary.
+    - provide opinion about a wine bottle based on a score out of 100 and a written commentary.
+
+From the Ingestion part:
+
+- The mocked wine scrapper is able to receive a wine information bottle through API endpoint and send it to the
+  RabbitMQ Queue
+- The Ingester is watching the RabbitMQ Queue and insert the wine bottle information into the Database when it receives
+  one.
 
 ### Limits and Improvements
 
+- Not all the backend code is covered with Unit and Integration testing but it could be done.
+
 ### Future development and needs
+
 As the central link is operational, the focus should be put on the two other endpoints
-- The front end should be developed after hiring a front-end or fullstack developer. (if fullstack, the developer 
+
+- The front end should be developed after hiring a front-end or fullstack developer. (if fullstack, the developer
   would be able to maintain the backend rest API part as well as continue developing the front end)
-- The first backend developer that work on the project could continue to work on it, especially starting to create 
+- The first backend developer that work on the project could continue to work on it, especially starting to create
   wines scrappers and maintaining the backend rest API part if there is only another front end developer.
 - A devops could also work in the beginning to integrate CI/CD and best practice for the code base (Code quality,etc).
-- As the project grows other developer could join the project, for example to create a mobile applications of the 
+- As the project grows other developer could join the project, for example to create a mobile applications of the
   front-end, or to create and maintain even more wine scrappers.
 
 ### Start locally
 
-To start locally, first you need to have Java 17 and the Docker Engine.
+To start locally each microservice independantly, first you need to have Java 17 and the Docker Engine.
 
 ```shell
+cd backend
 ./gradlew bootRun
 ```
 
-This command will create the local /data directory and start the application and 2 containers, one for Postgres
+This command will start the application and the containers need for the application, either Postgres, RabbitMQ or both.
 
 ### Deploy in production
 
